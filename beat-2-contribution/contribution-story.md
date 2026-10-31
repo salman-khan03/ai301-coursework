@@ -8,9 +8,8 @@ format criteria grade exactly that. Your course repo link is the whole submissio
 files and no evidence uploads are part of Assignment 5.
 
 **Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
+**Student:** Salman Khan
+**GitHub Username:** salman-khan03
 **Issue:** [GitHub issue link]
 **Pull Request:** [GitHub PR link, once opened]
 
@@ -55,10 +54,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Built issue-scout, a GitHub-wide search and grading funnel over my unit 1 rubric**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I installed the scout over my unit 1 skill and wrote three `gh search issues` queries from my fit profile, then ran one scan that graded five issues and accepted three. My first queries returned only issues updated that day, mostly tiny new repos and Hacktoberfest farms, and in the scan both rejected issues already had open linked PRs because my newest-first tie-break rewarded fresh claims. I added date and comment windows, `-linked:pr`, and an oldest-first tie-break, then re-ran the searches by hand and saw both claimed issues drop while the accepted ones stayed. The rubric also ranked a 0-star repo that needs Isaac Sim and a CUDA GPU first, so I added preferred checks for Verifiable locally and Adoption.
 
 **Unit 6: [one line on the tool work]**
 
