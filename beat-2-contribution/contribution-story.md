@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: Docs link to pygsl source forge repository, which pygsl no longer maintains
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -10,8 +10,8 @@ files and no evidence uploads are part of Assignment 5.
 **Contribution Number:** [1]
 **Student:** Salman Khan
 **GitHub Username:** salman-khan03
-**Issue:** [GitHub issue link]
-**Pull Request:** [GitHub PR link, once opened]
+**Issue:** https://github.com/fitbenchmarking/fitbenchmarking/issues/1767
+**Pull Request:** https://github.com/fitbenchmarking/fitbenchmarking/pull/1803
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -58,16 +58,13 @@ one in the week it belongs to.
 
 I installed the scout over my unit 1 skill and wrote three `gh search issues` queries from my fit profile, then ran one scan that graded five issues and accepted three. My first queries returned only issues updated that day, mostly tiny new repos and Hacktoberfest farms, and in the scan both rejected issues already had open linked PRs because my newest-first tie-break rewarded fresh claims. I added date and comment windows, `-linked:pr`, and an oldest-first tie-break, then re-ran the searches by hand and saw both claimed issues drop while the accepted ones stayed. The rubric also ranked a 0-star repo that needs Isaac Sim and a CUDA GPU first, so I added preferred checks for Verifiable locally and Adoption.
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Installed the voice guard, added my Upstream rules, and wrote repo memory for fitbenchmarking**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+I merged my three voice guide copies into one guide at `~/.claude/voice-guard/`, added rules for claims, questions, and pings, swapped repro-check and plan-check to their real-repo scopes, and distilled the repo's contributor docs into `CLAUDE.local.md`. The guard earned its place on my PR draft: it stopped the text because my Before and After blocks showed output without the command, which broke my own "show the run" rule, so I added the command and the full output. I used the pointer-line fallback for `voice-guide.md`, since a symlink isn't reliable in Git Bash on Windows. I have not applied the scope patch to my scout's rubric yet, because checking it needs a run of the unit 1 eval.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Installed the ship-gate and wrote a Windows manifest for fitbenchmarking's five checks**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+The ship-gate passed my real branch three times, and the first pass is the one that taught me something: its pr-precheck noticed that my script had turned `docs\build` into `docs` plus a backspace character in `test_evidence.md`, so I fixed the file and ran it again. The manifest fought me twice. On Windows the checks run through `cmd.exe`, so `.venv/bin/pytest` had to become `.venv\Scripts\pytest.exe`, and I first excluded `test_galahad` as a Windows failure before finding it only needed the optional `galahad` package, so I installed that and deleted the exclusion. The hook test also ran without any stop at first, because `claude` picked its PowerShell tool and both hooks only watch Bash; I reran it and opened the PR with PowerShell disabled, and then I saw the stops logged by both hooks. I didn't need to change my rubric.
 
 **Unit 8: [one line on the tool work]**
 
@@ -78,24 +75,16 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
+I searched with my scout's three `gh search issues` queries from my unit 1 fit profile, and the scan graded five issues and accepted three. This one, fitbenchmarking#1767, ranked second of the three, behind a one-file bug in CAD-for-isaacsim. My scout's verdict was accept, with one preferred check failed: the issue doesn't say which files to change. I chose it over the top pick because checking that one needs Isaac Sim and a CUDA GPU, which I don't have, and I could prove a docs link fix on my own Windows laptop. It fits my profile: a small, bounded change in a Python project that scientists actually use. I hope to learn how a real project's review works, starting with a change small enough that the conversation is about the contribution and not my code.
+
+My scout was right about the fit and wrong about the size. It called this a "link swap in 2 .rst files", but 9 of the 12 links had no direct replacement, because pygsl's new docs have no page for those minimizers. A grep can count links, but it can't tell you whether they still resolve, so I would add a step to the scout's actionable-detail check that requests any URLs an issue names. It also flagged the "Linked/duplicate of #1588" comment without a rule for what to do about it, so I read #1588 myself and raised the overlap in my claim. My claim comment: https://github.com/fitbenchmarking/fitbenchmarking/issues/1767#issuecomment-6550679350
 
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout. I ran my three queries as a scan, then re-checked the live state of the top candidates before picking.
+- What it produced: five graded issues, three accepted. This one was accepted with one preferred failure, Actionable detail: "body names replacement URLs but no files, repro or acceptance criteria".
+- Difficulties: it undersold the work, since it read "link swap" from the issue text without testing a single link, and it had no rule for a "duplicate of" comment.
+- What changed: nothing in the scout yet. I would add a URL check to Actionable detail, and a rule that a "duplicate of" comment sends you to read the other issue before claiming.
 
 ---
 
@@ -103,26 +92,26 @@ and add the link the moment your claim lands.]
 
 **Problem Description**
 
-[In your own words, what is broken or missing?]
+FitBenchmarking's documentation sends readers to pyGSL's old SourceForge site. pyGSL moved to GitHub in 2021, so the links are either dead or lead to a project page that is no longer maintained.
 
 **Expected Behavior**
 
-[What should happen?]
+Every pygsl link in the docs should open a live page on the project's current home, and each minimizer's link should lead to something about that minimizer.
 
 **Current Behavior**
 
-[What actually happens?]
+On master at 1ae498d3, all 12 pygsl links fail. The 9 per-minimizer links return 404, and the other 3 land on the SourceForge project page.
 
 **Affected Components**
 
-[Which parts of the codebase are involved?]
+Two documentation files: the GSL section of `docs/source/users/options/minimizer_option.rst` (11 links) and the GSL section of `docs/source/users/install_instructions/externals.rst` (1 link). No code is involved. The minimizer names on that page match `fitbenchmarking/controllers/gsl_controller.py`.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: `CLAUDE.local.md`, plus Claude Code to read the contributor docs and find every pygsl reference. No CONTRIBUTING.md exists here, so the rules came from `docs/source/contributors/workflow.rst` and `guidelines.rst`.
+- What it produced: a short repo memory file with the branch format `<nnn>-description_of_work`, the past-tense PR title rule, and the `Fixes #<nnn>` rule, and a list of the two affected files.
+- Difficulties: my scan said two files, which was right, but the first count of the links was 14. It's 12: that count came from reading grep lines, not links.
+- What changed: my reproduction script counts the links, so the number in my claim comes from a run and not from reading a grep.
 
 ---
 
@@ -130,31 +119,28 @@ and add the link the moment your claim lands.]
 
 **Environment Setup**
 
-[What a stranger would need to stand this up: your operating system,
-the relevant versions (language, runtime, package manager, the project
-itself), and how you set the project up. Then the challenges you faced
-and how you solved them, or that none came up.]
+Windows 11, Python 3.14.3, Git Bash, FitBenchmarking master at 1ae498d3, tested on 2026-10-31. I forked the repo with `gh repo fork`, then made a virtual environment with `python -m venv .venv` and ran `.venv/Scripts/python -m pip install -e ".[dev]" -r docs/requirements.txt`. The reproduction needs only Python's standard library and internet access, but the test suite needs more. It failed at collection until I installed the extras from `.github/workflows/main.yml` (`bumps`, `DFO`, `gvar`, `minuit`, `numdifftools`, `lmfit`, `nlopt`, `paramonte`, `SAS`) plus `galahad`. A second worktree failed with `Filename too long`, because the repo holds long data file names and my temporary path was already deep, so I compared against master by switching the clone instead.
 
 **Steps to Reproduce**
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
+1. Find every pygsl link: `git grep -n -i -E "sourceforge|pygsl" -- docs`.
+2. Request each one and follow redirects. My script `repro1767.py` does this for the two `.rst` files, and fails a link that errors or stays on SourceForge.
+3. Observed result: `12 pygsl links, 12 dead or still on SourceForge`, exit 1. For example, `http://pygsl.sourceforge.net/api/pygsl.html#pygsl.multiminimize.nmsimplex` returns 404, and `http://pygsl.sourceforge.net/` lands on `https://sourceforge.net/projects/pygsl/`.
+
+Control: `https://github.com/pygsl/pygsl`, `https://pypi.org/project/pygsl/`, and `https://pygsl.readthedocs.io/` all return 200, so my network and script aren't the failing part.
 
 **Reproduction Evidence**
 
-- **Commit showing reproduction:** [link to commit in your fork]
-- **Screenshots/logs:** [if applicable]
-- **My findings:** [what you discovered during reproduction; an
-  honest, evidenced cannot-reproduce that led you to re-pick or ask
-  the maintainer belongs here and costs you nothing]
+- **Commit showing reproduction:** https://github.com/salman-khan03/fitbenchmarking/commit/1ae498d31e08a818089356559e659ce2017d01b3
+- **Screenshots/logs:** the full 12-line output is in my PR description: https://github.com/fitbenchmarking/fitbenchmarking/pull/1803
+- **My findings:** the issue is real, and worse than it reads. pygsl's Read the Docs site has API pages only for `pygsl.statistics` and `pygsl.testing`, so its `api/pygsl.html` has no anchors for `multifit_nlin` or `multiminimize`, and changing the host would have produced 9 new dead links. Also, the old line 284 URL spelled `multifit__nlin` with two underscores, a typo of its own that the replacement removes.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: `repro1767.py`, which Claude Code wrote with me, and then repro-check on my posted claim.
+- What it produced: the 12-of-12 failure above. repro-check returned accept on the claim, with passes on `claim-specific-and-honest` and `ai-disclosure-compliant`.
+- Difficulties: repro-check graded a claim-only draft, so its other checks came back "not yet applicable". It also pointed out that my steps weren't re-runnable from what I gave it.
+- What changed: I added the environment line and exact steps to this section, and I recorded the `multifit__nlin` typo it found.
 
 ---
 
@@ -162,93 +148,97 @@ and how you solved them, or that none came up.]
 
 **Analysis**
 
-[Your analysis of the root cause: what is causing the issue, traced
-to the files and functions involved.]
+The cause is hardcoded URLs in two `.rst` source files; Sphinx just copies them through. In `docs/source/users/options/minimizer_option.rst`, the 9 links on lines 284 to 300 point at `http://pygsl.sourceforge.net/api/pygsl.html`, which no longer exists, and lines 275 and 302 point at the SourceForge site. Line 42 of `docs/source/users/install_instructions/externals.rst` does the same. The control shows the replacement hosts are live, and `docs/source/conf.py` only mocks the `pygsl` import, so it isn't involved.
 
 **Proposed Solution**
 
-[High-level description of your fix approach, and what you are
-deliberately NOT changing.]
+Replace all 12 URLs. The 9 per-minimizer links go to each class in pygsl's GitHub source, pinned to tag `v2.6.7` with a line number, which is how the same file already pins the SciPy `leastsq` link. The install link goes to pygsl's install page on Read the Docs, and the two general links go to `https://github.com/pygsl/pygsl`, with the label changed to `GitHub - PyGSL` to match the other entries.
+
+I am deliberately NOT changing the rest of the GSL install text, including the pip 20.0.2 note, because that is #1588. I'm also not touching any code or `conf.py`, and not adding a link-checking test or CI step, because the fix doesn't need one.
 
 **Implementation Plan**
 
-1. [Modify file X to do Y]
-2. [Add or change Z]
-3. [Update tests]
+1. In `minimizer_option.rst`, point line 275 at the GitHub repo, lines 284 and 286 at `pygsl/multifit_nlin.py` at `v2.6.7` (`#L75`, `#L88`), lines 288 to 300 at `pygsl/multiminimize.py` at `v2.6.7` (`nmsimplex` `#L181`, `nmsimplex2` `#L209`, `conjugate_pr` `#L131`, `conjugate_fr` `#L141`, `vector_bfgs` `#L160`, `vector_bfgs2` `#L176`, `steepest_descent` `#L117`), and line 302 at `GitHub - PyGSL`.
+2. In `externals.rst`, point line 42 at `https://pygsl.readthedocs.io/en/latest/ref/install.html`.
+3. Add no test: the change is documentation only and the repo has no test that reads docs links, so the reproduction script is the check.
 
-[Record deviations here as they happen: what changed mid-build and
-why. A recorded deviation is honest work; silent drift is not.]
+No deviations: the built diff is these 12 URLs and the one label, on one commit.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: plan-check, run from my clone on `plan.md` and `plan-comment.md`.
+- What it produced: accept on the first run, every required check passing, plus voice notes on the comment. It also reported that my procedure expects `comment.md` and a separate repro comment, while here it's `plan-comment.md` and one claim comment that carries the repro.
+- Difficulties: the real-repo scope won't grade a plan for an unclaimed issue, so my claim had to go up before the plan step and not at the end. The first accept also came with my comment breaking my own rule, since it said nothing about AI.
+- What changed: I added a line saying how Claude Code helped and a reason for the Read the Docs install link, and re-ran it: accept, with no rule broken.
 
 ---
 
 ## Testing Strategy
 
-[What observable checks prove the fix: your reproduction steps re-run
-against the built change (before and after), and the repo's own test
-suite or checks with the outcome shown. "Tests pass" with nothing
-observable named is not a strategy.]
+The decisive check is the reproduction itself. `python repro1767.py` on master at 1ae498d3 ends `12 pygsl links, 12 dead or still on SourceForge` and exits 1. On the branch at 228ae3fc it ends `12 pygsl links, 0 dead or still on SourceForge` and exits 0. For each `#L` link it also reads that line of pygsl's source and requires `class <method>(` for the method named on the docs line, so a link that resolves to the wrong class still fails. `git grep -n -i sourceforge -- docs` returns no pygsl line on the branch.
+
+The repo's own checks on the branch:
+
+- `ruff check .`: exit 0, `All checks passed!`
+- `ruff format --check .`: exit 0, `179 files already formatted`
+- `.custom_hooks/minimizer_spelling.py` on both files: exit 0
+- Sphinx HTML build: exit 0, with 3 docstring warnings, the same 3 as master
+- `pytest` over the folders in `ci/unit_tests_default.sh` with `--test-type default`: `871 passed, 110 skipped, 37 warnings, 16 subtests passed`
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: `repro1767.py` and `ship-manifest.md`, run with the same commands the ship-gate uses.
+- What it produced: the before and after above, and a `test_evidence.md` the ship-gate graded.
+- Difficulties: a first docs comparison printed "same warnings" only because a broken `sed` compared two empty files. The baseline test run also showed 1 failure on master, `test_galahad`, from a missing optional package.
+- What changed: I redid the comparison in Python, which gave 3 and 3, identical. I installed `galahad`, so the branch run went to 871 passed with no exclusion.
 
 ---
 
 ## Implementation Notes
 
-[A running log, added to as you work. Date each entry. What you
-built, decisions you made when you made them, wrong turns included.]
+**2026-10-31**
 
-**[Date]**
+Found that Unit 6 hadn't been done, so I installed the voice guard, my Upstream voice rules, and the real-repo scopes before the Unit 7 ship-gate. Forked and cloned fitbenchmarking, and picked #1767 from my scan. Reproduced it: 12 of 12 links failing.
 
-[Entry]
+**2026-10-31**
 
-**[Date]**
+Decided on pinned source links after testing the alternatives. pygsl's Read the Docs has no pages for these modules, and GSL's own docs have anchors for 7 of the 9 methods but nothing for `lmder` or `lmsder`. The repo's own SciPy `leastsq` link is pinned to a tag with line numbers, so I followed that. Posted my claim first because plan-check won't grade an unclaimed issue.
 
-[Entry]
+**2026-10-31**
+
+Built the fix in commit 228ae3fc on branch `1767-update_pygsl_docs_links`, following the repo's branch format and not the course's `fix/` habit. Wrong turn: I wrote a manifest exclusion for `test_galahad`, assuming a Windows failure, then installed the package, saw it pass, and removed the row.
+
+**2026-10-31**
+
+Ran the ship-gate. It passed, but pr-precheck caught corrupted Windows paths in `test_evidence.md`, so I fixed those and re-ran. The voice guard then stopped my PR draft for missing commands, so I fixed that and re-ran both. Opened PR #1803 through Claude Code with PowerShell disabled, so both hooks would fire.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: Claude Code on my clone, with `plan.md` as the boundary for what could go in the diff.
+- What it produced: one commit, 12 insertions and 12 deletions across two `.rst` files, which plan-check and pr-precheck both held against the plan.
+- Difficulties: a scripted write of Windows paths silently corrupted my evidence file, because `\b` and `\r` are escape sequences. I only found it because the ship-gate read the file.
+- What changed: I rewrote that table with forward slashes. Next time I'd read generated evidence before handing it to a gate.
 
 ---
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/fitbenchmarking/fitbenchmarking/pull/1803
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** "Updated pyGSL documentation links to the new repository", `Fixes #1767`. It replaces the 12 pygsl URLs in the two docs files: the 9 per-minimizer links go to each class in pygsl's source at tag `v2.6.7`, the install link goes to pygsl's install page on Read the Docs, and the two general links go to the GitHub repo. It leaves the rest of the GSL install text to #1588 and says the links won't follow newer pygsl releases. It includes the full before and after output of `python repro1767.py`, the checks with their outcomes, the repo's template checklist, and Notes for Reviewers on how I used Claude Code.
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-10-31: none yet.
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: the ship-gate, with my manifest of five repo checks and pr-precheck in live mode, then the voice guard, then `gh pr create` through Claude Code.
+- What it produced: `ship-gate: PASS` on the final text, with all 5 checks ok and pr-precheck accept. The hook honored that manual pass when the PR opened, and the voice guard logged a pass.
+- Difficulties: the hooks only watch the Bash tool, and `claude` chose PowerShell on my machine, so my first hook test proved nothing. Every text change also meant another gate run, at about two minutes and some course credit each.
+- What changed: I opened the PR with `--disallowedTools PowerShell` so the hooks would really run, and set the repo default with `gh repo set-default` first. I left my rubric alone, since nothing in it asked for something this repo doesn't.
 
 ---
 
