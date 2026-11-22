@@ -1,49 +1,41 @@
-# Updating Outdated pyGSL Documentation Links in FitBenchmarking
+# Fixing 12 Outdated pyGSL Documentation Links in FitBenchmarking
 
 ## Overview
 
-For my CodePath AI Open Source Capstone, I worked on FitBenchmarking, an open-source Python project that helps researchers compare different numerical optimization and fitting algorithms. I chose GitHub issue #1767 because parts of the documentation still linked to pyGSL's old SourceForge website, even though the project had moved to GitHub.
-
-What looked like a straightforward documentation update became a more involved investigation. I found 12 outdated links, reproduced the failures, and opened a pull request replacing them with verified destinations. I also used my own issue-search strategy, validation script, and automated quality checks to support the contribution.
-
-I decided which issue to work on, investigated possible replacement links, selected the final approach, and reviewed the changes. Claude Code assisted with searching, scripting, editing, and testing. My pull request, [#1803](https://github.com/fitbenchmarking/fitbenchmarking/pull/1803), is still open and awaiting review.
+For my CodePath AI Open Source Capstone, I contributed to FitBenchmarking, an open-source Python project that helps researchers compare numerical fitting algorithms. I worked on GitHub issue #1767, which concerned documentation links pointing to pyGSL's outdated SourceForge website. I found that nine links returned errors and three redirected to the old project page. Using Claude Code to locate the links, create a verification script, make the edits, and run checks, I prepared a documentation update covering all 12 links. I chose the replacement approach and reviewed the changes and results myself. I also developed the rubric and, with Claude Code, the search strategy used by the course-provided issue scout. My [pull request #1803](https://github.com/fitbenchmarking/fitbenchmarking/pull/1803) remains open and is awaiting maintainer review.
 
 ## What happened
 
-### Finding an issue worth working on
+### Finding the issue
 
-I started by building an issue-scout workflow to search GitHub for beginner-friendly contributions matching my Python and software development experience.
+I started with the issue-scout tool provided by CodePath. My responsibility was to develop the rubric and search strategy to identify contributions matching my Python experience and available development environment.
 
-My first searches were not very effective. They returned recently updated issues, including tasks from small repositories and issues that other contributors had already claimed. The tool was prioritizing activity instead of actual availability.
+Before the first scan, I added date and comment filters to reduce irrelevant results. However, the scan still included issues already claimed by other contributors.
 
-The first scan evaluated five issues and accepted three, but two rejected candidates already had open pull requests. That showed me my search strategy needed improvement.
-
-**Evidence 1 — Initial search results**
-
-From my October 31 scan:
+**Evidence 1 — Initial scan results, October 31, 2026**
 
 ```text
 4. MieuxVoter/presidentielle2027#157 (ranked #1): failed Unclaimed. A pull request (#302) was opened on 2026-10-31 and is still open.
 5. Arize-ai/openinference#3774 (ranked #3): failed Unclaimed. The issue author's PR #3776 is open, and someone posted "I'd like to take this one" on 2026-10-29.
 ```
 
-I revised my search strategy by adding date and comment filters, excluding linked pull requests with `-linked:pr`, and changing the tie-break to prioritize older updates instead of newer ones.
+The scan evaluated five issues and accepted three. After seeing the claimed issues, I revised my search strategy by adding `-linked:pr` and changing the tie-break from newest-first to oldest-first.
 
-After rerunning the search, both claimed issues disappeared while the three accepted candidates remained.
+I checked the search results again and confirmed that both claimed issues disappeared while the three accepted candidates remained.
 
-The scout initially ranked another issue higher, but it required Isaac Sim and a CUDA GPU. I chose FitBenchmarking because I could reproduce and validate the documentation problem locally on my Windows laptop.
+FitBenchmarking was my second-ranked accepted issue. I chose it over the highest-ranked candidate because that project required Isaac Sim and a CUDA GPU, while I could reproduce the FitBenchmarking issue locally.
 
-This experience showed me that a search tool can rank issues, but I still need to evaluate whether an issue is realistic for my environment.
+This taught me that a tool's ranking is only useful when I also verify whether the work is practical.
 
-### Reproducing the documentation problem
+### Reproducing the problem
 
-The issue concerned pyGSL, a Python interface for the GNU Scientific Library.
+The issue initially appeared to involve replacing outdated web addresses. However, I wanted to confirm what the links actually did before changing anything.
 
-I expected each documentation link to take readers to the correct project page or the specific optimization method being described. Instead, some returned errors while others redirected to an outdated project page.
+I expected the 12 documentation links to open the current pyGSL repository, installation documentation, or information about specific minimizers.
 
-I used Claude Code to help create a Python reproduction script, `repro1767.py`, that requested each URL and followed redirects.
+Claude Code helped locate the links and wrote a Python script called `repro1767.py` to request each URL and follow redirects.
 
-**Evidence 2 — Before the fix**
+**Evidence 2 — Original reproduction**
 
 Command:
 
@@ -51,7 +43,7 @@ Command:
 python repro1767.py
 ```
 
-Output excerpt from the original branch:
+Output excerpt:
 
 ```text
   FAIL 200 line 275: https://sourceforge.net/projects/pygsl/
@@ -60,17 +52,19 @@ Output excerpt from the original branch:
 12 pygsl links, 12 dead or still on SourceForge
 ```
 
-The script exited with code 1. Nine links returned HTTP 404 errors, while three still reached SourceForge. An important detail was that an HTTP 200 response did not necessarily mean a link was useful. A page could load successfully while still sending readers to the wrong destination.
+Nine links returned HTTP 404 errors. The other three reached SourceForge rather than the current project documentation.
 
-### Choosing the solution
+I learned that a successful HTTP response does not necessarily mean a documentation link works correctly. A page can load while still sending users somewhere unhelpful.
 
-My first thought was to replace the old website address with pyGSL's new documentation domain. However, I found that its Read the Docs website did not contain equivalent pages for the nine individual minimizers.
+### Choosing and implementing the fix
 
-A simple domain replacement would therefore have created another set of broken links.
+My original expectation was that replacing SourceForge with pyGSL's new documentation website would solve the problem.
 
-I also examined the GNU Scientific Library documentation, but it did not provide suitable destinations for every method.
+After investigating, I found that pyGSL's Read the Docs website did not contain equivalent pages for the nine individual minimizers. The GNU Scientific Library documentation also lacked suitable destinations for some of them.
 
-I decided to link the nine minimizers directly to their corresponding classes in pyGSL's GitHub source code. I pinned those links to version `v2.6.7` and included line numbers so readers would reach specific implementations.
+I decided to link those nine methods directly to their corresponding classes in pyGSL's GitHub source code.
+
+I pinned the links to version `v2.6.7` with specific line numbers. This followed an existing pattern in FitBenchmarking's documentation and reduced the risk of links changing when the repository's default branch changed.
 
 **Evidence 3 — Actual change from commit `228ae3fc`**
 
@@ -79,78 +73,75 @@ I decided to link the nine minimizers directly to their corresponding classes in
 +* `Levenberg-Marquardt (unscaled) <https://github.com/pygsl/pygsl/blob/v2.6.7/pygsl/multifit_nlin.py#L75>`__ (:code:`lmder`)
 ```
 
-I used the same general pattern already present in FitBenchmarking's documentation for a SciPy method.
+Claude Code made the documentation edits and ran the checks. I reviewed the diff and verified the replacement destinations.
 
-The remaining links were updated to pyGSL's GitHub repository and its current installation documentation.
+The final changes updated 12 links across two `.rst` documentation files without modifying the application's source code.
 
-The changes were limited to two `.rst` documentation files. I intentionally left the broader GSL installation instructions alone because those were covered by another issue, #1588.
+I deliberately left the broader GSL installation instructions unchanged because another issue, #1588, already covered that work.
 
-### Testing the changes
+### Testing and improving the submission
 
-After updating the links, I ran the reproduction script again.
+After making the changes, I ran the same reproduction script against the updated branch.
 
-**Evidence 4 — After the fix**
+**Evidence 4 — Verification after the fix**
 
 ```text
 12 pygsl links, 0 dead or still on SourceForge
 ```
 
-This time, the script exited successfully. It also checked that the GitHub source links identified the expected method classes rather than merely returning a successful HTTP status.
+The script exited successfully. It also checked that source-code links pointed to the expected method classes rather than merely returning HTTP 200.
 
-I ran additional checks on the contribution branch:
+Additional verification included Ruff linting and formatting checks, a successful Sphinx documentation build, and a test run reporting 871 passed and 110 skipped.
 
-- Ruff linting passed.
-- Ruff formatting checks passed.
-- The Sphinx documentation build succeeded, with the same three existing warnings as the baseline.
-- The focused default test suite reported 871 passed and 110 skipped.
+Before opening the pull request, I used the course's voice guard to check my draft against my writing rules.
 
-These checks gave me evidence that the documentation changes worked without introducing failures in the tested parts of the project.
+The guard stopped my first version because I included test results without showing the commands that produced them.
 
-### Improving my checks before opening the PR
-
-One of the most useful parts of the project happened while preparing my pull request.
-
-I had configured a voice guard to check whether my PR explanation followed the writing and evidence rules I had established.
-
-It caught a problem: I had included before-and-after results without showing the command used to produce them.
-
-**Evidence 5 — Voice guard results, October 31**
+**Evidence 5 — Voice guard log, October 31**
 
 ```text
 - 2026-10-31 19:01 [manual] stop: rule broken: "In the Testing section I paste the before and after of the repro, with the command, and the output of each check I ran." | target: pr_draft.md
 - 2026-10-31 19:02 [manual] pass | target: pr_draft.md
 ```
 
-I added the missing command and complete output, then reran the guard successfully.
+I added the missing commands and complete output, then reran the guard successfully.
 
-My ship-gate also caught a corrupted Windows path in my evidence file. I corrected the path and reran the checks.
+The ship-gate also caught a corrupted Windows path in my evidence file. I corrected it before proceeding.
 
-These failures were useful because they showed that my automated tools needed to verify the actual evidence, not simply report that a process had completed.
+These checks showed me that validation tools are most helpful when I investigate their failures and correct the underlying problem.
 
-### Opening the pull request and following up
+### Opening the PR and monitoring progress
 
-I opened [PR #1803](https://github.com/fitbenchmarking/fitbenchmarking/pull/1803) on November 1, 2026.
+I opened pull request #1803 on October 31, 2026, in my local time zone.
 
-On November 2, a maintainer, Letizia97, replied:
+On November 2, maintainer Letizia97 replied:
 
 > Hi @salman-khan03, thanks for your contribution ! We'll have a look and let you know soon
 
-On November 6, a maintainer merged the upstream master branch into my contribution branch. The project's automated checks passed again. This was not a merge of my pull request into the project; the PR remains open.
+On November 6, a maintainer merged the upstream master branch into my contribution branch, and all 12 CI checks passed. My PR itself was not merged.
 
-I also built a PR-monitoring workflow to help decide when to follow up. Its first version proposed contacting the maintainer too early because I had based the waiting period on time-to-merge rather than time-to-first-response. I corrected the measurement and updated the workflow. No automated follow-up was sent.
+During Unit 8, I used CodePath's supplied PR-monitoring tool. Claude Code drafted its first playbook and then revised it after discovering that the initial rules measured time to merge instead of time to a maintainer's first response.
 
-On November 20, the project adopted an AI contribution policy requiring disclosure and human responsibility. It also restricts primarily AI-generated contributions to issues labeled `good first issue`, and prohibits AI-written maintainer communication except translation or grammar assistance.
+The initial monitor run drafted a follow-up too early. I corrected the playbook's measurements and waiting rules. The second run recommended waiting until November 27. No automated message was sent.
 
-Because my issue has that label and my PR used Claude Code assistance, the maintainers will need to decide whether the contribution satisfies their policy. I disclosed the assistance in my PR and will respect their decision.
+I also discovered that FitBenchmarking adopted an AI contribution policy on November 20.
+
+The policy requires contributors to disclose AI assistance, understand their submissions, and write their own communications with maintainers. Importantly, **the project does not accept primarily AI-generated pull requests for issues labeled `good first issue`.**
+
+My issue has that label, so the maintainers may determine that my PR does not qualify under the new policy. I disclosed Claude Code's involvement and understand that the maintainers have the final decision.
 
 ## Limitations and what's next
 
-My contribution addresses 12 documentation links, not every possible documentation issue in FitBenchmarking.
+My contribution updates 12 documentation links, but it does not automatically detect future broken links.
 
-The biggest technical limitation is that the nine source-code links are pinned to pyGSL version `v2.6.7`. That makes their destinations stable, but they will not automatically follow newer releases. The contribution also does not update the remaining GSL installation instructions or add a continuous link-checking system.
+The nine source-code links are pinned to pyGSL version `v2.6.7`. This keeps their destinations stable, but they will not automatically reflect newer versions.
 
-If I continue this work, I would investigate whether a lightweight automated link checker could detect broken documentation links before future releases. I would also review whether more maintainable reference pages become available in newer pyGSL versions.
+I also left the remaining GSL installation documentation unchanged because that work belongs to issue #1588.
 
-Before making additional contributions, I would read the project's current contribution policy and clarify the acceptable scope of AI assistance.
+If I continue the project, I would investigate adding an automated documentation link checker so broken links could be detected during future updates.
 
-The biggest lesson I took from this experience is that even a small documentation change deserves careful investigation and testing. I learned to verify where links actually lead, compare results against a baseline, improve my tools when they miss something, and communicate my work with evidence rather than assumptions.
+I would also confirm the acceptable scope of AI assistance with maintainers before starting another issue, especially one labeled `good first issue`.
+
+The most important lesson from this contribution was that small changes still require careful engineering. I learned to reproduce an issue before changing anything, verify the actual outcome rather than trusting a successful command, improve a tool when its first result falls short, and take responsibility for work completed with AI assistance.
+
+Although my pull request is still awaiting review, the experience helped me better understand testing, technical documentation, open-source collaboration, and how to make decisions independently while using development tools.
