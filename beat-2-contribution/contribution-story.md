@@ -56,19 +56,19 @@ one in the week it belongs to.
 
 **Unit 5: Built issue-scout, a GitHub-wide search and grading funnel over my unit 1 rubric**
 
-I installed the scout over my unit 1 skill and wrote three `gh search issues` queries from my fit profile, then ran one scan that graded five issues and accepted three. My first queries returned only issues updated that day, mostly tiny new repos and Hacktoberfest farms, and in the scan both rejected issues already had open linked PRs because my newest-first tie-break rewarded fresh claims. I added date and comment windows, `-linked:pr`, and an oldest-first tie-break, then re-ran the searches by hand and saw both claimed issues drop while the accepted ones stayed. The rubric also ranked a 0-star repo that needs Isaac Sim and a CUDA GPU first, so I added preferred checks for Verifiable locally and Adoption.
+With Claude Code, I installed the scout over my unit 1 skill and wrote three `gh search issues` queries from my fit profile, then ran one scan that graded five issues and accepted three. My first queries returned only issues updated that day, mostly tiny new repos and Hacktoberfest farms, and in the scan both rejected issues already had open linked PRs because my newest-first tie-break rewarded fresh claims. I added date and comment windows, `-linked:pr`, and an oldest-first tie-break, then re-ran the searches by hand and saw both claimed issues drop while the accepted ones stayed. The rubric also ranked a 0-star repo that needs Isaac Sim and a CUDA GPU first, so I added preferred checks for Verifiable locally and Adoption.
 
 **Unit 6: Installed the voice guard, added my Upstream rules, and wrote repo memory for fitbenchmarking**
 
 I merged my three voice guide copies into one guide at `~/.claude/voice-guard/`, added rules for claims, questions, and pings, swapped repro-check and plan-check to their real-repo scopes, and distilled the repo's contributor docs into `CLAUDE.local.md`. The guard earned its place on my PR draft: it stopped the text because my Before and After blocks showed output without the command, which broke my own "show the run" rule, so I added the command and the full output. I used the pointer-line fallback for `voice-guide.md`, since a symlink isn't reliable in Git Bash on Windows. I have not applied the scope patch to my scout's rubric yet, because checking it needs a run of the unit 1 eval.
 
-**Unit 7: Installed the ship-gate and wrote a Windows manifest for fitbenchmarking's five checks**
+**Unit 7: Installed the ship-gate and, with Claude Code, wrote a Windows manifest for fitbenchmarking's five checks**
 
 The ship-gate passed my real branch three times, and the first pass is the one that taught me something: its pr-precheck noticed that my script had turned `docs\build` into `docs` plus a backspace character in `test_evidence.md`, so I fixed the file and ran it again. The manifest fought me twice. On Windows the checks run through `cmd.exe`, so `.venv/bin/pytest` had to become `.venv\Scripts\pytest.exe`, and I first excluded `test_galahad` as a Windows failure before finding it only needed the optional `galahad` package, so I installed that and deleted the exclusion. The hook test also ran without any stop at first, because `claude` picked its PowerShell tool and both hooks only watch Bash; I reran it and opened the PR with PowerShell disabled, and then I saw the stops logged by both hooks. I didn't need to change my rubric.
 
 **Unit 8: Ran the PR monitor on #1803, and rewrote the playbook that let it nudge too early**
 
-On 2026-11-22 the monitor read my PR as quiet for 20 days and drafted a nudge to Letizia97, and that draft was not sent. My first playbook, which Claude Code drafted from merged PR data, was the problem: it used days to merge instead of days to a first maintainer response, it counted a collaborator's PR as an outside one, and the draft guessed that the maintainer's Nov 6 merge of master into my branch was my own push. I corrected the sample, made a maintainer's push reset the count, and added a step to read the contributor docs and other PR threads before any nudge, and the second run drafted a wait note with Nov 27 as the earliest date. That same check found what the monitor can't see, because it only reads my own thread: the repo merged an AI policy on Nov 20 that bars AI-written messages to maintainers, so my first response rule is now that a draft is notes and I write every reply myself.
+On 2026-11-22 the monitor read my PR as quiet for 20 days and drafted a nudge to Letizia97, and that draft was not sent. My first playbook, which Claude Code drafted from merged PR data, was the problem: it used days to merge instead of days to a first maintainer response, it counted a collaborator's PR as an outside one, and the draft guessed that the maintainer's Nov 6 merge of master into my branch was my own push. Claude Code then corrected the sample, made a maintainer's push reset the count, and added a step to read the contributor docs and other PR threads before any nudge, and the second run drafted a wait note with Nov 27 as the earliest date. That same check found what the monitor can't see, because it only reads my own thread: the repo merged an AI policy on Nov 20 that bars AI-written messages to maintainers, so my first response rule is now that a draft is notes and I write every reply myself.
 
 ---
 
@@ -217,7 +217,7 @@ Letizia Protopapa merged master into my branch (06f7b9b8), so the PR now has two
 
 **2026-11-22**
 
-Installed the PR monitor, pulled the Nov 6 merge into my clone, and ran the monitor twice. No code changed, and nothing was posted. Wrong turn: the first playbook measured days to merge, so I measured days to a maintainer's first response on five merged PRs from outside contributors (1, 6, 16, 16, and 23) and rewrote the rules. Updated `CLAUDE.local.md`, which still said the repo had no AI policy.
+Through Claude Code, installed the PR monitor, pulled the Nov 6 merge into my clone, and ran the monitor twice. No code changed, and nothing was posted. Wrong turn: the first playbook measured days to merge, so Claude Code measured days to a maintainer's first response on five merged PRs from outside contributors (1, 6, 16, 16, and 23) and rewrote the rules. Updated `CLAUDE.local.md`, which still said the repo had no AI policy.
 
 **Toolkit**
 
@@ -270,8 +270,8 @@ Installed the PR monitor, pulled the Nov 6 merge into my clone, and ran the moni
 **What I'd Do Differently Next Time**
 
 - Read the issue's labels as carefully as its text. #1767 already had `Good first issue` when I claimed it on 2026-10-31. No AI policy existed then, and I disclosed Claude Code in my PR, but the policy merged on 2026-11-20 says PRs primarily generated by AI aren't accepted for issues with that label. Whether that applies to a PR opened earlier is the maintainers' call, and if they say it does, I'll close mine. Next time I'd leave that label for work I do by hand.
-- Read the project's recent merged PRs and threads every week while mine is open. The policy conversation started on 2026-11-04, and I found it on 2026-11-22.
-- Check the numbers behind a rule before a tool acts on it. My first staleness threshold looked reasonable, and it rested on the wrong measurement.
+- Read the project's recent merged PRs and threads every week while mine is open. The policy conversation started on 2026-11-04, and Claude Code found it on 2026-11-22.
+- Check the numbers behind a rule before a tool acts on it. The first staleness threshold Claude Code drafted looked reasonable, and it rested on the wrong measurement.
 - Keep PR descriptions shorter. Mine carries the full before and after output, which is a lot to read for 12 links.
 
 ---
