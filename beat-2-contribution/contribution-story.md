@@ -66,10 +66,9 @@ I merged my three voice guide copies into one guide at `~/.claude/voice-guard/`,
 
 The ship-gate passed my real branch three times, and the first pass is the one that taught me something: its pr-precheck noticed that my script had turned `docs\build` into `docs` plus a backspace character in `test_evidence.md`, so I fixed the file and ran it again. The manifest fought me twice. On Windows the checks run through `cmd.exe`, so `.venv/bin/pytest` had to become `.venv\Scripts\pytest.exe`, and I first excluded `test_galahad` as a Windows failure before finding it only needed the optional `galahad` package, so I installed that and deleted the exclusion. The hook test also ran without any stop at first, because `claude` picked its PowerShell tool and both hooks only watch Bash; I reran it and opened the PR with PowerShell disabled, and then I saw the stops logged by both hooks. I didn't need to change my rubric.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Ran the PR monitor on #1803, and rewrote the playbook that let it nudge too early**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+On 2026-11-22 the monitor read my PR as quiet for 20 days and drafted a nudge to Letizia97, and that draft was not sent. My first playbook, which Claude Code drafted from merged PR data, was the problem: it used days to merge instead of days to a first maintainer response, it counted a collaborator's PR as an outside one, and the draft guessed that the maintainer's Nov 6 merge of master into my branch was my own push. I corrected the sample, made a maintainer's push reset the count, and added a step to read the contributor docs and other PR threads before any nudge, and the second run drafted a wait note with Nov 27 as the earliest date. That same check found what the monitor can't see, because it only reads my own thread: the repo merged an AI policy on Nov 20 that bars AI-written messages to maintainers, so my first response rule is now that a draft is notes and I write every reply myself.
 
 ---
 
@@ -212,6 +211,14 @@ Built the fix in commit 228ae3fc on branch `1767-update_pygsl_docs_links`, follo
 
 Ran the ship-gate. It passed, but pr-precheck caught corrupted Windows paths in `test_evidence.md`, so I fixed those and re-ran. The voice guard then stopped my PR draft for missing commands, so I fixed that and re-ran both. Opened PR #1803 through Claude Code with PowerShell disabled, so both hooks would fire.
 
+**2026-11-06**
+
+Letizia Protopapa merged master into my branch (06f7b9b8), so the PR now has two commits: my 228ae3fc and that merge. CI ran again and all 12 checks passed.
+
+**2026-11-22**
+
+Installed the PR monitor, pulled the Nov 6 merge into my clone, and ran the monitor twice. No code changed, and nothing was posted. Wrong turn: the first playbook measured days to merge, so I measured days to a maintainer's first response on five merged PRs from outside contributors (1, 6, 16, 16, and 23) and rewrote the rules. Updated `CLAUDE.local.md`, which still said the repo had no AI policy.
+
 **Toolkit**
 
 - Tool: Claude Code on my clone, with `plan.md` as the boundary for what could go in the diff.
@@ -229,7 +236,10 @@ Ran the ship-gate. It passed, but pr-precheck caught corrupted Windows paths in 
 
 **Maintainer Feedback:**
 
-- 2026-10-31: none yet.
+- 2026-11-02: Letizia97 commented "thanks for your contribution ! We'll have a look and let you know soon" (https://github.com/fitbenchmarking/fitbenchmarking/pull/1803#issuecomment-6582767952). It asked for nothing.
+- 2026-11-02: I answered with a thumbs-up and no comment, because there was nothing to add.
+- 2026-11-06: Letizia Protopapa merged master into my branch (commit 06f7b9b8), and all 12 checks passed on it. No review or requested change came with it.
+- 2026-11-22: no reply posted. I pulled that merge into my clone and left the branch as it is. There is still no review, and I didn't send the nudge the monitor drafted.
 
 **Status:** Awaiting review
 
@@ -246,25 +256,32 @@ Ran the ship-gate. It passed, but pr-precheck caught corrupted Windows paths in 
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+- Checking links by what they land on, not only by status code. Three of the 12 old links returned 200 and still failed, because they redirected to the old SourceForge page. For `#L` links, a 200 doesn't prove the line is right, so the script also reads that line of pygsl's source and requires `class <method>(`.
+- Sphinx and reStructuredText link syntax, and pinning a source link to a tag (`v2.6.7`) so its line number stays true.
+- Building a baseline before trusting a result: the same tests, docs build, and script on master and on the branch, with a control showing that the new hosts were up.
+- Windows details of running gates: manifest rows go through `cmd.exe`, `\b` in a Python string is a backspace, and a hook that matches the Bash tool doesn't see PowerShell.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+- The issue read like a host swap, and 9 of the 12 links had no page to swap to. I tested Read the Docs and GSL's own docs first, then used pinned source links, the way the repo's SciPy `leastsq` link does it.
+- Several checks passed without testing anything: a docs comparison of two empty files, a hook test that ran in PowerShell, and an exclusion for `test_galahad` that only hid a missing package. Each time, I fixed the check and ran it again before using its result.
+- The quiet PR was the hard part of Unit 8. My thread held one friendly comment and no reason for the wait. The reason was on #1815, where the maintainer wrote that they had to draft an AI policy before merging new PRs from first-time contributors. Reading beyond my own thread is what explained it.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+- Read the issue's labels as carefully as its text. #1767 already had `Good first issue` when I claimed it on 2026-10-31. No AI policy existed then, and I disclosed Claude Code in my PR, but the policy merged on 2026-11-20 says PRs primarily generated by AI aren't accepted for issues with that label. Whether that applies to a PR opened earlier is the maintainers' call, and if they say it does, I'll close mine. Next time I'd leave that label for work I do by hand.
+- Read the project's recent merged PRs and threads every week while mine is open. The policy conversation started on 2026-11-04, and I found it on 2026-11-22.
+- Check the numbers behind a rule before a tool acts on it. My first staleness threshold looked reasonable, and it rested on the wrong measurement.
+- Keep PR descriptions shorter. Mine carries the full before and after output, which is a lot to read for 12 links.
 
 ---
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
-
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- [FitBenchmarking's contributor workflow](https://github.com/fitbenchmarking/fitbenchmarking/blob/1ae498d3/docs/source/contributors/workflow.rst): the branch format, the past-tense title, and the `Fixes #<nnn>` rule. The repo has no CONTRIBUTING.md.
+- [The repo's CI workflow](https://github.com/fitbenchmarking/fitbenchmarking/blob/1ae498d3/.github/workflows/main.yml): the list of optional extras, which got the test suite past collection.
+- [minimizer_option.rst on master](https://github.com/fitbenchmarking/fitbenchmarking/blob/1ae498d3/docs/source/users/options/minimizer_option.rst): its pinned SciPy `leastsq` link is the pattern I followed.
+- [pygsl's source at v2.6.7](https://github.com/pygsl/pygsl/blob/v2.6.7/pygsl/multiminimize.py) and [pygsl's Read the Docs site](https://pygsl.readthedocs.io/en/latest/): what the new links point at, and how I learned that there are no per-minimizer pages.
+- [Issue #1588](https://github.com/fitbenchmarking/fitbenchmarking/issues/1588): the overlapping issue Letizia97 linked, which set the edge of my scope.
+- [Letizia97's comment on #1815](https://github.com/fitbenchmarking/fitbenchmarking/pull/1815#issuecomment-6633562006) and [the AI policy](https://fitbenchmarking.readthedocs.io/en/latest/contributors/ai_policy.html): why new contributors' PRs waited, and what the repo now expects.
+- Claude Code: it helped me search, script, test, and draft across the whole contribution and this story, as the Toolkit blocks describe.
